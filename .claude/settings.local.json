@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(git -C /c/dev/portfolio log --oneline -10)",
-      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"developer portfolio dark mode professional tech\" --design-system -p \"Dev Portfolio\")"
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"developer portfolio dark mode professional tech\" --design-system -p \"Dev Portfolio\")",
+      "Bash(npm run:*)"
     ]
   }
 }

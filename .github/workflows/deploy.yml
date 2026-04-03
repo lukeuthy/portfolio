@@ -1,0 +1,179 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Portfolio CI/CD Pipeline
+#
+# WHAT THIS FILE DOES:
+#   • On push to main  → build + deploy to Vercel production
+#   • On pull request  → build + deploy a Vercel preview + comment the URL on the PR
+#
+# TEACHING NOTE: This file lives in your repo. GitHub reads it automatically.
+# You never have to register it anywhere — the path `.github/workflows/` is magic.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Deploy Portfolio          # Name shown in GitHub's Actions tab UI
+
+# ── TRIGGERS ──────────────────────────────────────────────────────────────────
+# GitHub watches for these events and fires this workflow when they happen.
+on:
+  push:
+    branches: [main]            # Production deploy: any push directly to main
+  pull_request:
+    branches: [main]            # Preview deploy: any PR that targets main
+
+# ── SHARED ENV VARS ───────────────────────────────────────────────────────────
+# These are available to every job in this file.
+# ${{ secrets.X }} is replaced at runtime with the encrypted value from GitHub Secrets.
+# They never appear in logs — GitHub automatically redacts them.
+env:
+  VERCEL_TOKEN:      ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID:     ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+# ── JOBS ──────────────────────────────────────────────────────────────────────
+jobs:
+
+  # ── JOB 1: Type-check + Build (runs on EVERY trigger) ─────────────────────
+  # This is the CI part — we verify the code is healthy before deploying.
+  # If this fails, the deploy job below never runs.
+  build:
+    name: Type-check & Build
+    runs-on: ubuntu-latest       # GitHub spins up a fresh Ubuntu VM for this
+
+    steps:
+      # Step 1 — Clone your repo onto the VM.
+      # Without this, the VM has an empty filesystem. Always first.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2 — Set up the correct Node.js version.
+      # "ubuntu-latest" comes with Node, but pinning the version prevents
+      # surprises when GitHub updates the default (which has broken builds before).
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'           # Cache node_modules between runs — speeds up builds
+
+      # Step 3 — Install dependencies.
+      # `npm ci` is stricter than `npm install`:
+      #   • It reads package-lock.json exactly (reproducible builds)
+      #   • It errors if lock file is out of date
+      #   • It never updates the lock file
+      # Always use `npm ci` in CI, not `npm install`.
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4 — TypeScript type check.
+      # This catches type errors that would only appear at compile time.
+      # `tsc --noEmit` checks types but doesn't write output files.
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # Step 5 — Build the Next.js app.
+      # This is the same as running `npm run build` locally.
+      # If your code has import errors, broken JSX, or missing modules,
+      # this step catches them before anything reaches Vercel.
+      - name: Build
+        run: npm run build
+
+  # ── JOB 2: Deploy to Production (only on push to main) ────────────────────
+  # This only runs after `build` passes AND only when we push to main.
+  # Pull requests skip this job entirely — they get the preview job below.
+  deploy-production:
+    name: Deploy → Production
+    runs-on: ubuntu-latest
+    needs: build                 # Waits for the build job to succeed first
+    # if: controls when this job runs. Skip it for pull_request events.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Install Vercel CLI globally on the VM.
+      # The VM starts with nothing — we have to install every tool we need.
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      # Pull Vercel project settings (framework detection, build config, etc.)
+      # `--yes` skips interactive prompts (required in CI — no human to click).
+      # The env vars tell the CLI which project to pull settings for.
+      - name: Pull Vercel environment info
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Build using Vercel's build system (may differ slightly from plain `next build`).
+      # The output goes to `.vercel/output/` in Vercel's Build Output API format.
+      - name: Build project via Vercel
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Deploy the pre-built output to Vercel's CDN.
+      # `--prebuilt` = don't rebuild on Vercel's side, use what we just built.
+      # This is faster and gives you a single build artifact.
+      - name: Deploy to Vercel production
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+  # ── JOB 3: Deploy Preview (only on pull requests) ─────────────────────────
+  # Every PR gets its own preview URL so you can review changes before merging.
+  # The URL gets posted as a comment on the PR automatically.
+  deploy-preview:
+    name: Deploy → Preview
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    # This permission lets the job post a comment on the PR.
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      # Pull preview environment settings (different from production).
+      - name: Pull Vercel environment info
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Build without --prod flag → preview build.
+      - name: Build project via Vercel
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Deploy and capture the preview URL.
+      # The URL is written to a file so the next step can read it.
+      - name: Deploy to Vercel preview
+        id: deploy                # Give this step an ID so we can reference its output
+        run: |
+          PREVIEW_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+
+      # Post the preview URL as a comment on the PR.
+      # `github-script` lets you run JavaScript that calls the GitHub API.
+      # This is what creates the "bot commented" you see on PRs.
+      - name: Comment preview URL on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🚀 Preview Deployment\n\n✅ Your preview is live:\n**${{ steps.deploy.outputs.preview_url }}**\n\n> This preview updates automatically when you push new commits to this PR.`
+            })
