@@ -52,17 +52,17 @@ function AnimCounter({ target, suffix = "" }: { target: number; suffix?: string 
 }
 
 const skills = [
-  { category: "Frontend",       items: ["React","Next.js","TypeScript","Tailwind CSS","Framer Motion"], color: "var(--accent-cyan)" },
-  { category: "Backend",        items: ["Node.js","Python","Go","REST APIs","GraphQL"],                 color: "var(--accent-violet)" },
-  { category: "Cloud & DevOps", items: ["AWS","Docker","Kubernetes","CI/CD","Terraform"],               color: "var(--accent-green)" },
-  { category: "Databases",      items: ["PostgreSQL","MongoDB","Redis","Prisma","Drizzle ORM"],         color: "var(--accent-pink)" },
+  { category: "Languages",      items: ["Python","JavaScript","TypeScript","C++","Java"],                            color: "var(--accent-cyan)" },
+  { category: "Frontend",       items: ["React","React Native","Next.js","Tailwind CSS","Framer Motion"],            color: "var(--accent-violet)" },
+  { category: "Backend & Cloud",items: ["Node.js","C#/.NET","REST APIs","AWS","Firebase","Docker"],                  color: "var(--accent-green)" },
+  { category: "ML / AI",        items: ["XGBoost","scikit-learn","TensorFlow","Pandas","NumPy"],                     color: "var(--accent-pink)" },
 ];
 
 const stats = [
-  { icon: Code2,  target: 50, suffix: "+", label: "Projects Built",    color: "var(--accent-cyan)" },
-  { icon: Globe,  target: 3,  suffix: "+", label: "Years Experience",  color: "var(--accent-violet)" },
-  { icon: Layers, target: 20, suffix: "+", label: "Open Source Repos", color: "var(--accent-green)" },
-  { icon: Cpu,    target: 10, suffix: "+", label: "Certifications",    color: "var(--accent-pink)" },
+  { icon: Code2,  target: 6,  suffix: "+", label: "Projects Built",    color: "var(--accent-cyan)" },
+  { icon: Globe,  target: 1,  suffix: "+", label: "Year Experience",   color: "var(--accent-violet)" },
+  { icon: Layers, target: 1,  suffix: "",  label: "npm Package",       color: "var(--accent-green)" },
+  { icon: Cpu,    target: 6,  suffix: "",  label: "Certifications",    color: "var(--accent-pink)" },
 ];
 
 const ctn = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
@@ -90,14 +90,15 @@ export default function About() {
           {/* Left */}
           <motion.div ref={ref} variants={ctn} initial="hidden" animate={inView ? "show" : "hidden"} className="space-y-6">
             <motion.p variants={itm} className="text-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-              I&apos;m a passionate full-stack developer who loves turning complex problems into
-              elegant, user-friendly solutions. With a strong foundation in both frontend and
-              backend technologies, I thrive in fast-paced environments.
+              I&apos;m Jasper — a CS student at Mapúa Malayan Colleges Mindanao (2023–2027) and
+              a freelance full-stack developer building production-grade web and mobile apps.
+              I&apos;ve shipped a published npm CLI tool, contributed to AI training data at Outlier,
+              and delivered freelance projects from e-commerce to real-time chat.
             </motion.p>
             <motion.p variants={itm} className="text-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-              When I&apos;m not coding, you&apos;ll find me contributing to open source, exploring
-              new technologies, or writing about software engineering. I believe in writing
-              clean, maintainable code and building products that make a real difference.
+              My thesis work applies XGBoost for transit ETA prediction. I&apos;m driven by clean
+              architecture, great developer experience, and the belief that software should
+              solve real problems for real people.
             </motion.p>
 
             {/* Stats grid */}

@@ -3,8 +3,10 @@ import "./globals.css";
 import CursorGlow from "@/components/CursorGlow";
 
 export const metadata: Metadata = {
-  title: "Portfolio | Developer",
-  description: "Full-stack developer portfolio showcasing projects, certifications, and open source contributions.",
+  title: "Jasper Nikko Navarez | Full-Stack Developer",
+  description: "CS student at Mapúa MCM. Freelance full-stack developer, open-source contributor, and AI/ML enthusiast. Building production-grade software across web, mobile, and cloud.",
+  keywords: ["Jasper Navarez", "full-stack developer", "React", "Next.js", "cloudpush-cli", "Mapúa MCM"],
+  authors: [{ name: "Jasper Nikko Navarez", url: "https://github.com/lukeuthy" }],
 };
 
 export default function RootLayout({

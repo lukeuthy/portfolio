@@ -5,10 +5,10 @@ import { Mail, ArrowUp } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XIcon } from "./icons";
 
 const socials = [
-  { href: "https://github.com", icon: GithubIcon, label: "GitHub" },
-  { href: "https://linkedin.com", icon: LinkedinIcon, label: "LinkedIn" },
-  { href: "https://twitter.com", icon: XIcon, label: "Twitter" },
-  { href: "mailto:you@example.com", icon: Mail, label: "Email" },
+  { href: "https://github.com/lukeuthy",                    icon: GithubIcon,   label: "GitHub" },
+  { href: "https://linkedin.com/in/jasper-navarez",         icon: LinkedinIcon, label: "LinkedIn" },
+  { href: "https://twitter.com/lukeuthy",                   icon: XIcon,        label: "Twitter" },
+  { href: "mailto:navareznikkojasper@gmail.com",            icon: Mail,         label: "Email" },
 ];
 
 const navLinks = [
@@ -110,7 +110,7 @@ export default function Footer() {
               Have a project in mind or want to collaborate? Feel free to reach out!
             </p>
             <motion.a
-              href="mailto:you@example.com"
+              href="mailto:navareznikkojasper@gmail.com"
               whileHover={{ scale: 1.04, boxShadow: "0 0 28px rgba(56,189,248,0.35)" }}
               whileTap={{ scale: 0.96 }}
               className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl cursor-pointer transition-all duration-200"
@@ -133,7 +133,7 @@ export default function Footer() {
           style={{ borderTop: "1px solid rgba(120,140,255,0.1)" }}
         >
           <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-            © {new Date().getFullYear()} Your Name. Built with Next.js, Tailwind CSS &amp; Framer Motion.
+            © {new Date().getFullYear()} Jasper Nikko Navarez. Built with Next.js, Tailwind CSS &amp; Framer Motion.
           </p>
           <motion.button
             onClick={scrollToTop}

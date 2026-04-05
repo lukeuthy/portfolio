@@ -12,15 +12,15 @@ type Project = {
 };
 
 const projects: Project[] = [
-  { title: "CloudDeploy CLI",     description: "One-command deployments to AWS, GCP & Azure. Multi-env configs, rollback, real-time logs.",         tags: ["Go","AWS","Docker","CLI"],        category: "DevOps",   stars: 842,  github: "https://github.com", live: "https://example.com", featured: true, accentColor: "#4ade80", icon: "☁️" },
-  { title: "OpenAuth",            description: "Lightweight extensible auth for Node.js — OAuth2, OIDC, magic links, zero vendor lock-in.",           tags: ["TypeScript","Node.js","OAuth2"],  category: "Library",  stars: 1203, github: "https://github.com", featured: true, accentColor: "#38bdf8", icon: "🔐" },
-  { title: "DataGrid Pro",        description: "High-performance React table with virtual scrolling, inline editing, and CSV/Excel export.",          tags: ["React","TypeScript","Canvas"],   category: "Frontend", stars: 578,  github: "https://github.com", live: "https://example.com", featured: true, accentColor: "#a78bfa", icon: "📊" },
-  { title: "PocketDB",            description: "Embedded type-safe SQLite ORM for TypeScript — migrations, relations, fluent query builder.",         tags: ["TypeScript","SQLite","ORM"],     category: "Library",  stars: 391,  github: "https://github.com", accentColor: "#f472b6", icon: "🗃️" },
-  { title: "StreamKit",           description: "Real-time streaming infra — WebSocket, SSE, long-poll. Built for high-throughput scenarios.",         tags: ["Node.js","Redis","WebSocket"],   category: "Backend",  stars: 267,  github: "https://github.com", accentColor: "#fbbf24", icon: "⚡" },
-  { title: "DesignSystem UI",     description: "Accessible component library with Radix primitives, Tailwind, full theming and dark mode.",           tags: ["React","Tailwind","Radix UI"],   category: "Frontend", stars: 445,  github: "https://github.com", live: "https://example.com", accentColor: "#38bdf8", icon: "🎨" },
+  { title: "CloudPush CLI",      description: "Published npm package for zero-config cloud deployments. One command pushes your project to the cloud with smart env detection and real-time logs.",  tags: ["Node.js","CLI","npm","AWS"],          category: "CLI",     stars: 0,  github: "https://github.com/lukeuthy/cloudpush-cli", live: "https://www.npmjs.com/package/cloudpush-cli", featured: true, accentColor: "#4ade80", icon: "☁️" },
+  { title: "R503 Bus ETA",       description: "Thesis project — XGBoost-powered transit ETA prediction for the R503 route. React Native app with real-time schedule data and ML inference.",         tags: ["Python","XGBoost","React Native","ML"], category: "Mobile", stars: 0,  github: "https://github.com/lukeuthy", featured: true, accentColor: "#38bdf8", icon: "🚌" },
+  { title: "PacePoints",         description: "React Native fitness tracker with ML-based workout recommendations, progress analytics, and dynamic goal-setting powered by TypeScript.",              tags: ["React Native","TypeScript","ML"],     category: "Mobile", stars: 0,  github: "https://github.com/lukeuthy", featured: true, accentColor: "#a78bfa", icon: "🏃" },
+  { title: "OneChat",            description: "Real-time chat application built with Java and Spring Boot. WebSocket-powered messaging, user rooms, and persistent chat history.",                    tags: ["Java","WebSocket","Spring Boot"],     category: "Backend", stars: 0,  github: "https://github.com/lukeuthy", accentColor: "#f472b6", icon: "💬" },
+  { title: "Joolz",              description: "Freelance e-commerce platform for a jewelry brand. Built with React and Firebase — real-time inventory, cart, checkout, and admin dashboard.",         tags: ["React","Firebase","TypeScript"],      category: "Web",    stars: 0,  github: "https://github.com/lukeuthy", accentColor: "#fbbf24", icon: "💎" },
+  { title: "Jewelry Express",    description: "Full-stack e-commerce backend for a local jeweler. Node.js REST API with MongoDB, order management, image uploads, and role-based access control.",   tags: ["Node.js","MongoDB","REST API"],       category: "Backend", stars: 0,  github: "https://github.com/lukeuthy", accentColor: "#38bdf8", icon: "📦" },
 ];
 
-const categories = ["All","Frontend","Backend","DevOps","Library"];
+const categories = ["All","Web","Mobile","Backend","CLI"];
 
 /* ─── 3-D tilt project card ──────────────────────── */
 function ProjectCard({ project, i }: { project: Project; i: number }) {
@@ -101,8 +101,12 @@ function ProjectCard({ project, i }: { project: Project; i: number }) {
 
         <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
           <div className="flex items-center gap-1.5 text-sm" style={{ color: "var(--accent-amber)" }}>
-            <Star size={13} fill="currentColor" />
-            <span className="font-medium">{project.stars.toLocaleString()}</span>
+            {project.stars > 0 && (
+              <>
+                <Star size={13} fill="currentColor" />
+                <span className="font-medium">{project.stars.toLocaleString()}</span>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-1">
             {[
@@ -169,7 +173,7 @@ export default function Projects() {
 
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
           className="mt-10 flex justify-center">
-          <motion.a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer"
+          <motion.a href="https://github.com/lukeuthy" target="_blank" rel="noopener noreferrer"
             whileHover={{ scale: 1.05, boxShadow: "0 0 24px rgba(167,139,250,0.25)" }} whileTap={{ scale: 0.95 }}
             className="glass shimmer-card gradient-border inline-flex items-center gap-2 px-6 py-3 text-sm font-medium cursor-pointer"
             style={{ color: "var(--text-secondary)" }}

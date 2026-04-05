@@ -6,7 +6,7 @@ import { ChevronDown, Download, Sparkles } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XIcon } from "./icons";
 
 /* ─── Typewriter ──────────────────────────────────── */
-const ROLES = ["Full-Stack Developer", "Open Source Contributor", "Cloud Engineer", "Problem Solver"];
+const ROLES = ["Full-Stack Developer", "CS Student @ Mapúa MCM", "Open-Source Contributor", "AI/ML Enthusiast"];
 
 function TypeWriter({ words }: { words: string[] }) {
   const [index, setIndex] = useState(0);
@@ -183,7 +183,7 @@ export default function Hero() {
             <motion.span className="gradient-text-cyan-violet text-glow-violet inline-block"
               animate={{ filter: ["drop-shadow(0 0 16px rgba(167,139,250,0.4))","drop-shadow(0 0 32px rgba(56,189,248,0.5))","drop-shadow(0 0 16px rgba(167,139,250,0.4))"] }}
               transition={{ duration: 4, repeat: Infinity }}>
-              Your Name
+              Jasper
             </motion.span>
           </motion.h1>
 
@@ -194,8 +194,8 @@ export default function Hero() {
 
           {/* Description */}
           <motion.p variants={itm} className="max-w-xl text-lg leading-relaxed mb-10" style={{ color: "var(--text-secondary)" }}>
-            I build performant, scalable applications and love contributing to open source.
-            Passionate about clean code, great developer experience, and shipping things that matter.
+            CS student at Mapúa MCM building production-grade software across web, mobile &amp; cloud.
+            Published npm author, freelance developer, and AI/ML practitioner who ships things that matter.
           </motion.p>
 
           {/* CTAs */}
@@ -221,9 +221,9 @@ export default function Hero() {
           {/* Socials */}
           <motion.div variants={itm} className="flex items-center gap-3">
             {[
-              { href: "https://github.com",   icon: GithubIcon,   label: "GitHub" },
-              { href: "https://linkedin.com", icon: LinkedinIcon, label: "LinkedIn" },
-              { href: "https://twitter.com",  icon: XIcon,        label: "Twitter" },
+              { href: "https://github.com/lukeuthy",                        icon: GithubIcon,   label: "GitHub" },
+              { href: "https://linkedin.com/in/jasper-navarez",             icon: LinkedinIcon, label: "LinkedIn" },
+              { href: "https://twitter.com/lukeuthy",                       icon: XIcon,        label: "Twitter" },
             ].map(({ href, icon: Icon, label }) => (
               <motion.a key={label} href={href} target="_blank" rel="noopener noreferrer"
                 whileHover={{ scale: 1.15, boxShadow: "0 0 20px rgba(167,139,250,0.4)" }}

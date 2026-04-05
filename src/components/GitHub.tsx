@@ -5,7 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { Star, GitFork, GitPullRequest, GitCommitHorizontal, TrendingUp } from "lucide-react";
 import { GithubIcon } from "./icons";
 
-const GITHUB_USERNAME = "yourusername";
+const GITHUB_USERNAME = "lukeuthy";
 
 const contributions = [
   { icon: GitCommitHorizontal, value: "1,247", label: "Commits this year",   color: "var(--accent-green)",  num: 1247 },

@@ -98,7 +98,7 @@ export default function Navbar() {
 
           {/* CTA */}
           <motion.a
-            href="mailto:you@example.com"
+            href="mailto:navareznikkojasper@gmail.com"
             whileHover={{
               scale: 1.05,
               boxShadow: "0 0 22px rgba(56,189,248,0.45)",
