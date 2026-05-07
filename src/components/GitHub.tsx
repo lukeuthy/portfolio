@@ -1,20 +1,25 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { Star, GitFork, GitPullRequest, GitCommitHorizontal, TrendingUp } from "lucide-react";
+import { Star, GitFork, BookOpen, Users, TrendingUp } from "lucide-react";
 import { GithubIcon } from "./icons";
 
 const GITHUB_USERNAME = "lukeuthy";
 
-const contributions = [
-  { icon: GitCommitHorizontal, value: "1,247", label: "Commits this year",   color: "var(--accent-green)",  num: 1247 },
-  { icon: GitPullRequest,       value: "86",    label: "Pull requests merged", color: "var(--accent-cyan)",   num: 86 },
-  { icon: Star,                 value: "342",   label: "Stars earned",          color: "var(--accent-amber)",  num: 342 },
-  { icon: GitFork,              value: "124",   label: "Forks",                 color: "var(--accent-violet)", num: 124 },
-];
+type GithubStats = {
+  publicRepos: number;
+  followers: number;
+  totalStars: number;
+  totalForks: number;
+  totalContributions: number;
+  monthlyTotals: number[];
+  maxMonthly: number;
+  grid: number[][] | null;
+};
 
-function generateGrid() {
+/* ─── Deterministic fallback grid (same across renders) ── */
+function makeStaticGrid(): number[][] {
   return Array.from({ length: 52 }, (_, week) =>
     Array.from({ length: 7 }, (_, day) => {
       const seed = (week * 7 + day) * 2654435761;
@@ -27,7 +32,7 @@ function generateGrid() {
     })
   );
 }
-const GRID = generateGrid();
+const STATIC_GRID = makeStaticGrid();
 
 const CELL_COLORS = [
   "rgba(255,255,255,0.04)",
@@ -37,13 +42,30 @@ const CELL_COLORS = [
   "#4ade80",
 ];
 
-/* ─── Activity bar chart ──────────────────────────── */
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const MONTH_ACTIVITY = [42,68,55,90,73,88,95,62,78,85,71,60];
 
 export default function GitHub() {
   const gridRef = useRef(null);
   const gridVisible = useInView(gridRef, { once: true, margin: "-80px" });
+  const [stats, setStats] = useState<GithubStats | null>(null);
+
+  useEffect(() => {
+    fetch("/api/github")
+      .then(r => r.json())
+      .then(setStats)
+      .catch(() => {/* silently use fallback */});
+  }, []);
+
+  const grid = stats?.grid ?? STATIC_GRID;
+  const monthlyTotals = stats?.monthlyTotals ?? Array(12).fill(50);
+  const maxMonthly = stats?.maxMonthly ?? 100;
+
+  const statCards = [
+    { icon: Star,     value: stats?.totalStars      ?? "—", label: "Stars earned",    color: "var(--accent-amber)" },
+    { icon: GitFork,  value: stats?.totalForks      ?? "—", label: "Forks",           color: "var(--accent-violet)" },
+    { icon: BookOpen, value: stats?.publicRepos     ?? "—", label: "Public repos",    color: "var(--accent-cyan)" },
+    { icon: Users,    value: stats?.followers       ?? "—", label: "Followers",       color: "var(--accent-green)" },
+  ];
 
   return (
     <section id="github" className="py-28 relative overflow-hidden">
@@ -62,7 +84,7 @@ export default function GitHub() {
 
         {/* Stat cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {contributions.map(({ icon: Icon, value, label, color }, i) => (
+          {statCards.map(({ icon: Icon, value, label, color }, i) => (
             <motion.div key={label}
               initial={{ opacity: 0, y: 24, scale: 0.95 }} whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }} transition={{ delay: i * 0.08 }}
@@ -91,12 +113,12 @@ export default function GitHub() {
             </p>
             <span className="text-xs px-2.5 py-1 rounded-full"
               style={{ background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.2)", color: "var(--accent-green)" }}>
-              Past 52 weeks
+              {stats ? `${stats.totalContributions.toLocaleString()} contributions` : "Past 52 weeks"}
             </span>
           </div>
 
           <div className="flex gap-[3px] min-w-max">
-            {GRID.map((week, wi) => (
+            {grid.map((week, wi) => (
               <div key={wi} className="flex flex-col gap-[3px]">
                 {week.map((level, di) => {
                   const idx = wi * 7 + di;
@@ -133,18 +155,21 @@ export default function GitHub() {
           className="glass p-6 mb-6">
           <p className="text-sm font-semibold mb-5" style={{ color: "var(--text-primary)" }}>Monthly Contributions</p>
           <div className="flex items-end gap-2 h-24">
-            {MONTHS.map((m, i) => (
-              <div key={m} className="flex-1 flex flex-col items-center gap-1">
-                <motion.div className="w-full rounded-t-md relative overflow-hidden"
-                  style={{ height: `${MONTH_ACTIVITY[i]}%`, background: "rgba(74,222,128,0.15)", border: "1px solid rgba(74,222,128,0.2)" }}
-                  initial={{ scaleY: 0, originY: 1 }} whileInView={{ scaleY: 1 }}
-                  viewport={{ once: true }} transition={{ delay: i * 0.04, duration: 0.5, ease: "easeOut" }}>
-                  <motion.div className="absolute inset-0" style={{ background: "linear-gradient(180deg,rgba(74,222,128,0.5),rgba(74,222,128,0.1))" }}
-                    animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2 + i * 0.1, repeat: Infinity }} />
-                </motion.div>
-                <span className="text-[9px]" style={{ color: "var(--text-muted)" }}>{m}</span>
-              </div>
-            ))}
+            {MONTHS.map((m, i) => {
+              const pct = Math.round((monthlyTotals[i] / maxMonthly) * 100) || 4;
+              return (
+                <div key={m} className="flex-1 flex flex-col items-center gap-1">
+                  <motion.div className="w-full rounded-t-md relative overflow-hidden"
+                    style={{ height: `${pct}%`, background: "rgba(74,222,128,0.15)", border: "1px solid rgba(74,222,128,0.2)" }}
+                    initial={{ scaleY: 0, originY: 1 }} whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true }} transition={{ delay: i * 0.04, duration: 0.5, ease: "easeOut" }}>
+                    <motion.div className="absolute inset-0" style={{ background: "linear-gradient(180deg,rgba(74,222,128,0.5),rgba(74,222,128,0.1))" }}
+                      animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2 + i * 0.1, repeat: Infinity }} />
+                  </motion.div>
+                  <span className="text-[9px]" style={{ color: "var(--text-muted)" }}>{m}</span>
+                </div>
+              );
+            })}
           </div>
         </motion.div>
 

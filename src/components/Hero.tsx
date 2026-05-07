@@ -6,7 +6,7 @@ import { ChevronDown, Download, Sparkles } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XIcon } from "./icons";
 
 /* ─── Typewriter ──────────────────────────────────── */
-const ROLES = ["Full-Stack Developer", "CS Student @ Mapúa MCM", "Open-Source Contributor", "AI/ML Enthusiast"];
+const ROLES = ["Full-Stack Developer", "Open-Source Developer", "Freelance Engineer", "React Native Developer"];
 
 function TypeWriter({ words }: { words: string[] }) {
   const [index, setIndex] = useState(0);
@@ -21,7 +21,7 @@ function TypeWriter({ words }: { words: string[] }) {
     return () => { if (t.current) clearTimeout(t.current); };
   }, [displayed, deleting, index, words]);
   return (
-    <span className="gradient-text-cyan-violet text-glow-cyan">
+    <span className="gradient-text-cyan-violet text-glow-cyan whitespace-nowrap">
       {displayed}
       <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
         className="inline-block w-[2px] h-9 md:h-11 ml-1 align-middle rounded-full"
@@ -188,14 +188,14 @@ export default function Hero() {
           </motion.h1>
 
           {/* Typewriter */}
-          <motion.div variants={itm} className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-8 h-14 flex items-center">
+          <motion.div variants={itm} className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-8 flex items-center overflow-hidden" style={{ height: "3.5rem" }}>
             <TypeWriter words={ROLES} />
           </motion.div>
 
           {/* Description */}
           <motion.p variants={itm} className="max-w-xl text-lg leading-relaxed mb-10" style={{ color: "var(--text-secondary)" }}>
-            CS student at Mapúa MCM building production-grade software across web, mobile &amp; cloud.
-            Published npm author, freelance developer, and AI/ML practitioner who ships things that matter.
+            Full-stack developer and published npm author building production-grade software
+            across web, mobile, and cloud. Freelance engineer who ships things that matter.
           </motion.p>
 
           {/* CTAs */}

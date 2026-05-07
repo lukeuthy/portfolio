@@ -1,18 +1,17 @@
 "use client";
 
 import { useRef, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useMotionTemplate, useSpring, useTransform } from "framer-motion";
 import { Award, ExternalLink, CheckCircle2, Shield } from "lucide-react";
 
 type Cert = { title: string; issuer: string; date: string; credentialId: string; url: string; logo: string; accentColor: string; skills: string[]; };
 
 const certifications: Cert[] = [
-  { title: "AWS AI Practitioner",            issuer: "Amazon Web Services",  date: "In Progress", credentialId: "AWS-AIP-PENDING",   url: "https://aws.amazon.com/certification/certified-ai-practitioner/",                     logo: "AWS",  accentColor: "#fbbf24", skills: ["Generative AI","Foundation Models","Responsible AI","AWS AI Services"] },
-  { title: "AWS GenAI Foundations",          issuer: "Amazon Web Services",  date: "2025",        credentialId: "AWS-GENAI-XXXX",    url: "https://aws.amazon.com/training/learn-about/generative-ai/",                          logo: "AWS",  accentColor: "#f59e0b", skills: ["Prompt Engineering","LLMs","AWS Bedrock","GenAI Concepts"] },
-  { title: "AWS Cloud Foundations",          issuer: "Amazon Web Services",  date: "2024",        credentialId: "AWS-CF-XXXX",       url: "https://aws.amazon.com/training/awsacademy/",                                         logo: "AWS",  accentColor: "#fb923c", skills: ["EC2","S3","IAM","VPC","Cloud Concepts"] },
-  { title: "Data Science Orientation",       issuer: "IBM / Coursera",       date: "2024",        credentialId: "IBM-DSO-XXXX",      url: "https://www.coursera.org/learn/data-science-orientation",                             logo: "IBM",  accentColor: "#38bdf8", skills: ["Data Science","Python","Jupyter","Methodology"] },
-  { title: "IT Specialist Data Analytics",   issuer: "Certiport / Pearson",  date: "2024",        credentialId: "CERT-ITS-DA-XXXX",  url: "https://certiport.pearsonvue.com/Certifications/IT-Specialist/Certification/Verify",  logo: "CERT", accentColor: "#a78bfa", skills: ["Data Analysis","Excel","Visualization","Statistics"] },
-  { title: "MOS Excel Associate",            issuer: "Microsoft",            date: "2024",        credentialId: "MOS-EXCEL-XXXX",    url: "https://learn.microsoft.com/en-us/certifications/mos-excel-2019/",                    logo: "MOS",  accentColor: "#4ade80", skills: ["Excel","Formulas","PivotTables","Data Management"] },
+  { title: "AWS AI Practitioner",          issuer: "Amazon Web Services", date: "In Progress", credentialId: "AWS-AIP-PENDING",  url: "https://aws.amazon.com/certification/certified-ai-practitioner/",                     logo: "AWS",  accentColor: "#fbbf24", skills: ["Generative AI","Foundation Models","Responsible AI","AWS AI Services"] },
+  { title: "AWS Generative AI Foundations",issuer: "Amazon Web Services", date: "2025",        credentialId: "AWS-GENAI-XXXX",   url: "https://aws.amazon.com/training/learn-about/generative-ai/",                          logo: "AWS",  accentColor: "#f59e0b", skills: ["Prompt Engineering","LLMs","AWS Bedrock","GenAI Concepts"] },
+  { title: "AWS Cloud Foundations",        issuer: "Amazon Web Services", date: "2024",        credentialId: "AWS-CF-XXXX",      url: "https://aws.amazon.com/training/awsacademy/",                                         logo: "AWS",  accentColor: "#fb923c", skills: ["EC2","S3","IAM","VPC","Cloud Architecture"] },
+  { title: "IT Specialist Data Analytics", issuer: "Certiport / Pearson", date: "2024",        credentialId: "CERT-ITS-DA-XXXX", url: "https://certiport.pearsonvue.com/Certifications/IT-Specialist/Certification/Verify",  logo: "CERT", accentColor: "#a78bfa", skills: ["Data Analysis","Visualization","Statistics","Spreadsheets"] },
+  { title: "MOS Excel Associate",          issuer: "Microsoft",           date: "2024",        credentialId: "MOS-EXCEL-XXXX",   url: "https://learn.microsoft.com/en-us/certifications/mos-excel-2019/",                    logo: "MOS",  accentColor: "#4ade80", skills: ["Excel","Formulas","PivotTables","Data Management"] },
 ];
 
 /* ─── Holographic cert card ───────────────────────── */
@@ -26,8 +25,10 @@ function CertCard({ cert, i }: { cert: Cert; i: number }) {
 
   // Holographic rainbow shift
   const hueShift = useTransform(mx, [-0.5, 0.5], [0, 60]);
-  const shineX  = useTransform(mx, [-0.5, 0, 0.5], ["0%", "50%", "100%"]);
-  const shineY  = useTransform(my, [-0.5, 0, 0.5], ["0%", "50%", "100%"]);
+  const shineX   = useTransform(mx, [-0.5, 0, 0.5], ["0%", "50%", "100%"]);
+  const shineY   = useTransform(my, [-0.5, 0, 0.5], ["0%", "50%", "100%"]);
+  const shineBg  = useMotionTemplate`radial-gradient(ellipse at ${shineX} ${shineY}, rgba(255,255,255,0.09) 0%, transparent 60%)`;
+  const hueFilter = useMotionTemplate`hue-rotate(${hueShift}deg)`;
 
   const onMove = useCallback((e: React.MouseEvent) => {
     if (!ref.current) return;
@@ -55,13 +56,13 @@ function CertCard({ cert, i }: { cert: Cert; i: number }) {
         {/* Holographic foil overlay */}
         <motion.div className="absolute inset-0 rounded-[18px] pointer-events-none"
           style={{
-            background: `radial-gradient(ellipse at ${shineX.get()} ${shineY.get()}, rgba(255,255,255,0.09) 0%, transparent 60%)`,
+            background: shineBg,
             mixBlendMode: "overlay",
           }} />
 
         {/* Spectral shimmer strip */}
         <motion.div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-[18px] pointer-events-none"
-          style={{ background: `linear-gradient(90deg, ${cert.accentColor}, #a78bfa, #f472b6, ${cert.accentColor})`, backgroundSize: "200%", filter: `hue-rotate(${hueShift.get()}deg)` }}
+          style={{ background: `linear-gradient(90deg, ${cert.accentColor}, #a78bfa, #f472b6, ${cert.accentColor})`, backgroundSize: "200%", filter: hueFilter }}
           animate={{ backgroundPosition: ["0%", "200%"] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
 
         {/* Corner badge */}

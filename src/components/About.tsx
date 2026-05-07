@@ -62,7 +62,7 @@ const stats = [
   { icon: Code2,  target: 6,  suffix: "+", label: "Projects Built",    color: "var(--accent-cyan)" },
   { icon: Globe,  target: 1,  suffix: "+", label: "Year Experience",   color: "var(--accent-violet)" },
   { icon: Layers, target: 1,  suffix: "",  label: "npm Package",       color: "var(--accent-green)" },
-  { icon: Cpu,    target: 6,  suffix: "",  label: "Certifications",    color: "var(--accent-pink)" },
+  { icon: Cpu,    target: 5,  suffix: "",  label: "Certifications",    color: "var(--accent-pink)" },
 ];
 
 const ctn = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
@@ -90,15 +90,16 @@ export default function About() {
           {/* Left */}
           <motion.div ref={ref} variants={ctn} initial="hidden" animate={inView ? "show" : "hidden"} className="space-y-6">
             <motion.p variants={itm} className="text-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-              I&apos;m Jasper — a CS student at Mapúa Malayan Colleges Mindanao (2023–2027) and
-              a freelance full-stack developer building production-grade web and mobile apps.
-              I&apos;ve shipped a published npm CLI tool, contributed to AI training data at Outlier,
-              and delivered freelance projects from e-commerce to real-time chat.
+              I&apos;m Jasper — a full-stack developer and published npm author specializing in
+              production-grade web and mobile applications. I build across the entire stack:
+              React and React Native on the front end, Node.js and .NET on the back end,
+              and AWS and Firebase in the cloud.
             </motion.p>
             <motion.p variants={itm} className="text-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-              My thesis work applies XGBoost for transit ETA prediction. I&apos;m driven by clean
-              architecture, great developer experience, and the belief that software should
-              solve real problems for real people.
+              I&apos;ve applied machine learning with XGBoost to transit prediction systems,
+              contributed AI training data professionally, and shipped freelance products
+              end-to-end from architecture to deployment. I care about clean code, great
+              developer experience, and software that solves real problems.
             </motion.p>
 
             {/* Stats grid */}
