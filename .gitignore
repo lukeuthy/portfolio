@@ -13,9 +13,9 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
+# vite build output
+/dist/
+/.vite-ssg-temp/
 
 # production
 /build
@@ -42,6 +42,3 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
-
-.vercel

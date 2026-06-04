@@ -63,15 +63,14 @@ jobs:
         run: npm ci
 
       # Step 4 — TypeScript type check.
-      # This catches type errors that would only appear at compile time.
-      # `tsc --noEmit` checks types but doesn't write output files.
+      # `vue-tsc` understands .vue single-file components (plain `tsc` cannot).
       - name: Type check
-        run: npx tsc --noEmit
+        run: npx vue-tsc --noEmit
 
-      # Step 5 — Build the Next.js app.
-      # This is the same as running `npm run build` locally.
-      # If your code has import errors, broken JSX, or missing modules,
-      # this step catches them before anything reaches Vercel.
+      # Step 5 — Build the Vite + Vue app (vite-ssg prerenders to static HTML).
+      # `npm run build` also runs vue-tsc, but this keeps the type-check as an
+      # explicit, fast-failing CI gate. Catches import/template/module errors
+      # before anything reaches Vercel.
       - name: Build
         run: npm run build
 
