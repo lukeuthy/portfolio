@@ -2,8 +2,12 @@
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { ChevronDown, Download } from '@lucide/vue'
 import { socialIcon } from '@/components/icons/brand'
+import PixelImage from '@/components/ui/PixelImage.vue'
 import { profile, codeSnippets } from '@/data/profile'
 import { socials } from '@/data/socials'
+
+// Set true once /me.png loads; keeps the portrait column hidden until you add it.
+const hasPhoto = ref(false)
 
 /* ── Typewriter ─────────────────────────────────── */
 const typed = ref('')
@@ -61,6 +65,7 @@ const fragments = [
     >{{ f.text }}</span>
 
     <div class="relative z-10 max-w-6xl mx-auto px-6 pt-20 w-full">
+      <div class="grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
       <div
         v-scrub="{ y: [0, -90], opacity: [1, 0.15], start: 'top top', end: 'bottom top' }"
         class="flex flex-col items-start"
@@ -110,6 +115,7 @@ const fragments = [
           <a
             v-magnetic="0.25"
             :href="profile.resume"
+            download
             class="panel shimmer-card px-8 py-3.5 text-xs font-mono uppercase tracking-widest flex items-center gap-2 cursor-pointer"
             style="color: var(--text-primary)"
           >
@@ -132,6 +138,34 @@ const fragments = [
             <component :is="socialIcon[s.icon]" :size="17" />
           </a>
         </div>
+      </div>
+
+      <!-- Pixel portrait (auto-hidden until /me.png exists) -->
+      <div v-show="hasPhoto" class="hidden lg:block justify-self-center">
+        <div
+          class="panel crt-scanlines pixel-grain relative p-2 w-[260px]"
+          style="border-color: rgba(167,139,250,0.4)"
+        >
+          <span
+            class="absolute top-0 left-0 right-0 z-10"
+            style="height: 3px; background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-violet), transparent)"
+          />
+          <PixelImage
+            src="/me.png"
+            :alt="profile.name"
+            :resolution="130"
+            :levels="6"
+            @loaded="hasPhoto = true"
+            @error="hasPhoto = false"
+          />
+          <p
+            class="text-center text-[9px] font-mono uppercase tracking-[0.25em] mt-2"
+            style="color: var(--text-muted)"
+          >
+            PLAYER_01
+          </p>
+        </div>
+      </div>
       </div>
     </div>
 

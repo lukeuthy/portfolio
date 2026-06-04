@@ -121,6 +121,18 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-display); letter-spacing: 0.02em; }
   z-index: 2;
 }
 
+/* Low-bitrate grain texture — drop on any positioned element */
+.pixel-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  z-index: 3;
+}
+
 /* Fullscreen CRT layer (applied once at app root) */
 .crt-overlay {
   position: fixed;
