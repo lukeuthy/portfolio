@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Jasper Nikko Navarez',
   firstName: 'Jasper',
-  brand: '<Dev/>',
+  brand: '<jas/>',
   email: 'navareznikkojasper@gmail.com',
   resume: '/resume.pdf',
   status: 'Available for work',
