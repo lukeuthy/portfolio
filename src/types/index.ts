@@ -21,7 +21,7 @@ export interface Project {
   tags: string[]
   category: ProjectCategory
   stars: number
-  github: string
+  github?: string
   live?: string
   featured?: boolean
   accentColor: string

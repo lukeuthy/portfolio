@@ -96,6 +96,7 @@ const filtered = computed(() =>
             </div>
             <div class="flex items-center gap-1">
               <a
+                v-if="p.github"
                 :href="p.github"
                 target="_blank"
                 rel="noopener noreferrer"

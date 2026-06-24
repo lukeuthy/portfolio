@@ -4,6 +4,40 @@ export const categories: (ProjectCategory | 'All')[] = ['All', 'Web', 'Mobile', 
 
 export const projects: Project[] = [
   {
+    title: '121edc',
+    description:
+      'Lumina Tech — full-stack ERP for a centralized company management system: role-based access control, attendance management, subprojects, e-signature validation, and QR-based verification. Delivered ~40% of the Phase 2 build.',
+    tags: ['ERP', 'RBAC', 'E-Signature', 'QR'],
+    category: 'Web',
+    stars: 0,
+    featured: true,
+    accentColor: '#38bdf8',
+    icon: '🏢',
+  },
+  {
+    title: 'Passly.ph',
+    description:
+      "Lumina Tech — secure QR-based authentication platform with user onboarding, access control, and backend-driven account management. Onboarded 150+ attendees at Passly's first event.",
+    tags: ['Auth', 'QR Codes', 'Access Control'],
+    category: 'Web',
+    stars: 0,
+    live: 'https://passly.ph',
+    featured: true,
+    accentColor: '#4ade80',
+    icon: '🔐',
+  },
+  {
+    title: 'Orbit',
+    description:
+      'Lumina Tech — ERP modules spanning attendance tracking, consume requests, and operational workflows, built with Next.js, Express, and MySQL.',
+    tags: ['Next.js', 'Express', 'MySQL'],
+    category: 'Web',
+    stars: 0,
+    featured: true,
+    accentColor: '#a78bfa',
+    icon: '🛰️',
+  },
+  {
     title: 'CloudPush CLI',
     description:
       'Published open-source npm CLI that abstracts platform-specific deployment tooling across 7 cloud providers — Vercel, Netlify, Railway, Render, Fly.io, Cloudflare Pages, and GitHub Pages — into one unified interface.',
