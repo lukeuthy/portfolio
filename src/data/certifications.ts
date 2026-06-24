@@ -2,10 +2,10 @@ import type { Cert } from '@/types'
 
 export const certifications: Cert[] = [
   {
-    title: 'AWS AI Practitioner',
+    title: 'AWS Certified AI Practitioner (AIF-C01)',
     issuer: 'Amazon Web Services',
-    date: 'In Progress',
-    credentialId: 'AWS-AIP-PENDING',
+    date: '2025',
+    credentialId: 'AWS-AIF-C01',
     url: 'https://aws.amazon.com/certification/certified-ai-practitioner/',
     logo: 'AWS',
     accentColor: '#fbbf24',

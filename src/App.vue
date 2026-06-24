@@ -8,6 +8,7 @@ import CursorGlow from '@/components/layout/CursorGlow.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Hero from '@/components/sections/Hero.vue'
 import About from '@/components/sections/About.vue'
+import Experience from '@/components/sections/Experience.vue'
 import Projects from '@/components/sections/Projects.vue'
 import GitHub from '@/components/sections/GitHub.vue'
 import Organizations from '@/components/sections/Organizations.vue'
@@ -57,6 +58,7 @@ onBeforeUnmount(() => {
   <main class="relative" style="z-index: 1">
     <Hero />
     <About />
+    <Experience />
     <Projects />
     <GitHub />
     <Organizations />

@@ -6,16 +6,16 @@ export const profile = {
   resume: '/resume.pdf',
   status: 'Available for work',
   roles: [
-    'Full-Stack Developer',
-    'Open-Source Developer',
-    'Freelance Engineer',
+    'Full-Stack Web Developer',
     'React Native Developer',
+    'Open-Source Author',
+    'Freelance Engineer',
   ],
   heroBio:
-    'Full-stack developer and published npm author building production-grade software across web, mobile, and cloud. Freelance engineer who ships things that matter.',
+    'Full-stack web developer and published npm author building production-grade software across web, mobile, and cloud. I ship things that matter.',
   bio: [
-    "I'm Jasper — a full-stack developer and published npm author specializing in production-grade web and mobile applications. I build across the entire stack: React and React Native on the front end, Node.js and .NET on the back end, and AWS and Firebase in the cloud.",
-    "I've applied machine learning with XGBoost to transit prediction systems, contributed AI training data professionally, and shipped freelance products end-to-end from architecture to deployment. I care about clean code, great developer experience, and software that solves real problems.",
+    "I'm Jasper — a full-stack web developer and published npm author building production-grade web and mobile apps. I work across the stack: React and React Native (Expo) on the front end, Node.js/Express and .NET on the back end, and Firebase and AWS in the cloud.",
+    "Right now I'm building ERP, authentication, and QR-verification platforms at Lumina Tech. I've validated AI training data with RAG pipelines at MineBright, applied XGBoost to transit-ETA prediction for my thesis, and shipped freelance products end-to-end. I care about clean code, strong security fundamentals, and software that solves real problems.",
   ],
 } as const
 
